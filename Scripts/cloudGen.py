@@ -58,3 +58,25 @@ stopWords = nltk.corpus.stopwords.words('english')
 lemmatizer = WordNetLemmatizer()
 text, stem_words = alterText(text, stemmer, stopWords, lemmatizer)
 print(text)
+
+
+word_count = dict()
+for word in text:
+    if word in word_count.keys():
+        word_count[word] = word_count[word] + 1
+    else:
+        word_count[word] = 1
+
+freq_to_words = dict()        
+for word in word_count.keys():
+    freq = word_count[word]
+    if freq in freq_to_words.keys():
+        freq_to_words[freq].append(word)
+    else: 
+        freq_to_words[freq] = [word]
+
+sorted_freq_to_words = dict()
+for key in sorted(freq_to_words.keys(), reverse = True):
+    sorted_freq_to_words[key] = freq_to_words[key]
+    
+print(sorted_freq_to_words)
