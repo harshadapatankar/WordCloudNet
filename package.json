@@ -16,5 +16,7 @@
     "url": "https://github.com/sagar3992/WordCloudNet/issues"
   },
   "homepage": "https://github.com/sagar3992/WordCloudNet#readme",
-  "dependencies": {}
+  "dependencies": {
+    "d3": "^6.2.0"
+  }
 }
