@@ -1,14 +1,16 @@
 # WordCloudNet
 Generates word cloud visualizations for the article or the context you put in :)
 
-## Installation
-If you are using npm, 
+## Installation and Setup for Python Environment (Required)
+, 
 ```bash
-npm install d3
+$ virtualenv <env_name>
+$ source <env_name>/bin/activate
+(<env_name>)$ pip install -r Scripts/requirements.txt
 ```
-Or download latest version from
-* d3.js.org 
 ## Example:
 ```
-<script src="https://d3js.org/d3.v6.js"></script>
+$ virtualenv myenv
+$ source myenv/bin/activate
+(<env_name>)$ pip install -r Scripts/requirements.txt
 ```
