@@ -37,9 +37,9 @@ return document.getElementById(id).value;
 }
   
 // Save message to firebase
-function saveMessage(text){
+function saveMessage(text) {
     // Add a second document with a generated ID.
-    db.collection("users").add({
+    textDBref.add({
         text: text,
     })
     .then(function(docRef) {
