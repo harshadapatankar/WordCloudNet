@@ -18,5 +18,5 @@ $ .\wordCloudEnv\Scripts\activate
 ```
 
 ```bash
-(<env_name>)$ pip install -r requirements.txt
+(wordCloudEnv) $ pip install -r requirements.txt
 ```
