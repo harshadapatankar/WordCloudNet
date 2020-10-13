@@ -13,8 +13,9 @@ parser = argparse.ArgumentParser()
 parser.add_argument('-d', '--DocumentId', help='Mention the DocumentID of Firebase stored text', required=True)
 args = parser.parse_args() 
 documentId = args.DocumentId
+dbAccessor = databaseAccessor.DabaseAccessor()
 
-dbData = databaseAccessor.read_document(documentId)
+dbData = dbAccessor.read_document(documentId)
 if not (dbData):
     print("No such document")
     exit()
@@ -59,13 +60,20 @@ lemmatizer = WordNetLemmatizer()
 text, stem_words = alterText(text, stemmer, stopWords, lemmatizer)
 print(text)
 
+#word -> count
+#count -> [word1, word1]
 
 word_count = dict()
 for word in text:
-    if word in word_count.keys():
-        word_count[word] = word_count[word] + 1
-    else:
-        word_count[word] = 1
+    if word != '':
+        if word in word_count.keys():
+            word_count[word] = word_count[word] + 1
+        else:
+            word_count[word] = 1
+
+dbAccessor.update_global_db(word_count)
+#print(dbAccessor.get_global_db(word_count))
+dbAccessor.update_response_word_count_db(documentId, word_count)
 
 freq_to_words = dict()        
 for word in word_count.keys():
@@ -78,5 +86,6 @@ for word in word_count.keys():
 sorted_freq_to_words = dict()
 for key in sorted(freq_to_words.keys(), reverse = True):
     sorted_freq_to_words[key] = freq_to_words[key]
-    
-print(sorted_freq_to_words)
+
+dbAccessor.update_response_frequencies_db(documentId, sorted_freq_to_words)
+#print(sorted_freq_to_words)
