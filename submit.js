@@ -1,22 +1,14 @@
-//import * as firebase from 'firebase';
-//import 'firebase/firestore';
-//const firebase = require();
-// // Required for side-effects
 // Initialize Firebase (ADD YOUR OWN DATA)
-//const firebase = require("firebase");
-// Required for side-effects
-
-//var serviceAccount = require(["Scripts/wordCloudEnv/Scripts/wordcloud-firebase-secretkey.json"]);
-
 var firebaseConfig = {
-    //credential: admin.credential.cert(serviceAccount),
     apiKey: "AIzaSyDztnNjfhUtjVtLxi9kv0SjkH03uCGMQxw",
     authDomain: "wordcloud-3e528.firebaseapp.com",
     databaseURL: "https://wordcloud-3e528.firebaseio.com",
     projectId: "wordcloud-3e528",
     storageBucket: "wordcloud-3e528.appspot.com",
     messagingSenderId: "340398309853",
-}
+    appId: "1:340398309853:web:2398232dd10c6598ecb634",
+    measurementId: "G-KV81F05JRP"
+};
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 //firebase.analytics();
@@ -34,12 +26,7 @@ function submitForm(e){
     var myText = getInputVal('text');
     // Save message
     saveMessage(myText);
-    // Show alert
-    document.querySelector('.alert').style.display = 'block';
-    // Hide alert after 3 seconds
-    //setTimeout(function(){
-    //    document.querySelector('.alert').style.display = 'none';
-    //},3000);
+    alert("Document Submitted");
     // Clear form
     document.getElementById('textForm').reset();
 }
@@ -52,7 +39,7 @@ return document.getElementById(id).value;
 // Save message to firebase
 function saveMessage(text){
     // Add a second document with a generated ID.
-    textDBref.add({
+    db.collection("users").add({
         text: text,
     })
     .then(function(docRef) {
