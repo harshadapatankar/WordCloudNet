@@ -19,4 +19,5 @@ $ .\wordCloudEnv\Scripts\activate
 
 ```bash
 (wordCloudEnv) $ pip install -r requirements.txt
+$ python -m ntlk.downloader all 
 ```
