@@ -4,7 +4,7 @@ from firebase_admin import firestore
 
 class DabaseAccessor:
     def __init__(self):
-        cred = credentials.Certificate('WordCloudEnv\Scripts\wordcloud-3e528-4c26154a4280.json')
+        cred = credentials.Certificate('WordCloudEnv\Scripts\wordcloud-firebase-secretkey.json')
         firebase_admin.initialize_app(cred)
         self.__db__ = firestore.client()
 
