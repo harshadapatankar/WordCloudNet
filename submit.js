@@ -1,4 +1,6 @@
 // Initialize Firebase (ADD YOUR OWN DATA)
+var shell = require('shelljs');
+var documetId = null;
 var firebaseConfig = {
     apiKey: "AIzaSyDztnNjfhUtjVtLxi9kv0SjkH03uCGMQxw",
     authDomain: "wordcloud-3e528.firebaseapp.com",
@@ -16,6 +18,7 @@ var db = firebase.firestore()
 // Reference messages collection
 var textDBref = db.collection('TextData');
 
+//var exec = require('child_process').exec, child;
 // Listen for form submit
 document.getElementById('textForm').addEventListener('submit', submitForm);
   
@@ -28,6 +31,13 @@ function submitForm(e){
     saveMessage(myText);
     alert("Document Submitted");
     // Clear form
+    if (documetId != null) {
+        var command  = 'python Scripts/cloudGen.py -d '+ documetId;
+        if (shell.exec(command).code !== 0) {
+            shell.echo('Error: command failed');
+            shell.exit(1);
+        }
+    }
     document.getElementById('textForm').reset();
 }
   
@@ -44,7 +54,7 @@ function saveMessage(text) {
     })
     .then(function(docRef) {
         console.log("Document written with ID: ", docRef.id);
-        return docRef.id
+        documentId = docRef.id
     })
     .catch(function(error) {
         console.error("Error adding document: ", error);
