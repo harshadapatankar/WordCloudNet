@@ -2,16 +2,31 @@
 <html lang="en" dir="ltr">
     <head>
         <meta charset="utf-8">
-        <title>Hello world</title>
+        <title> Word Cloud CECS </title>
         <link rel="stylesheet" href="main.css">
+        <script>
+            function doSomething() {
+                alert('Form submitted!');
+                return false;
+            }
+        </script>
     </head>
     <body>
-        <h1>Timeline</h1>
-        <p id="data"></p>
-        <ul>
-            <li class="list">Edit the head</li>
-            <li class="list">Edit the body</li>
-        </ul>
+        <p style="position: absolute; right:0; top: 0" id="status"></p>
+
+        <div style="text-align: center">
+        <div id="presets"></div>
+        <div id="custom-area">
+           
+            <form onsubmit="return doSomething();" class="my-form">
+                <p><label for="text"> Input your text below!</label>
+                <p><textarea id="text">
+                How the word cloud generates words
+                </textarea>
+                <input type="submit" value="Submit">
+            </form>
+
+        </div>
+        </div>
     </body>
-    <script src="./app.js"></script>
 </html>
