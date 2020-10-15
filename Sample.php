@@ -1,7 +1,9 @@
 <?php
 $documentID = $_GET['DocId'];
-$command = escapeshellcmd(' python /Users/sahilmirchandani/Desktop/Masters_CS/SEM-2/Sagar/WordCloudNet/Scripts/cloudGen.py -d '.$documentID);
+
+$command1 = escapeshellcmd('pwd');
+$PATH = shell_exec($command1);
+$command = escapeshellcmd($PATH.'/Scripts/wordCloudEnv/bin/python '.$PATH.'/Scripts/cloudGen.py -d '.$documentID);
 $output = shell_exec($command);
-echo $output;
 echo "Ended";
 ?>
