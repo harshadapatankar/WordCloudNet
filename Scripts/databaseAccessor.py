@@ -1,6 +1,7 @@
 import firebase_admin
 from firebase_admin import credentials
-from firebase_admin import firestore
+#from firebase_admin import firestore
+from firebase_admin import db
 
 class DabaseAccessor:
     def __init__(self):
@@ -12,45 +13,41 @@ class DabaseAccessor:
         elif platform == "win32":
             this_file += "/wordCloudEnv/Scripts/wordcloud-firebase-secretkey.json"
         cred = credentials.Certificate(this_file)
-        firebase_admin.initialize_app(cred)
-        self.__db__ = firestore.client()
+        firebase_admin.initialize_app(cred, {
+            'databaseURL': 'https://wordcloud-3e528.firebaseio.com',
+            'databaseAuthVariableOverride': None
+        })
+        self.__db__ = db
 
     def read_document(self, DocID):
-        data = self.__db__.collection(u'TextData').document(DocID).get().to_dict()
+        data = self.__db__.reference('TextData/-'+DocID).get()
         if data:
             return data
         else: 
             return None
 
     def update_global_db(self, word_count):
-        globaldb_ref = self.__db__.collection(u'GlobalWordCounts')
+        globaldb_ref = self.__db__.reference('GlobalWordCounts')
+        globaldb = self.__db__.reference('GlobalWordCounts').get()
         for myword in word_count.keys():
-            word_ref = globaldb_ref.document(myword)
-            word = word_ref.get()
-            if(word.exists):
-                new_word_count = word.to_dict()['count'] + word_count[myword]
-                word_ref.set({u'count' : new_word_count})
+            if myword in globaldb.keys():
+                globaldb[myword] = globaldb[myword] + word_count[myword]
             else:
-                new_word_count = word_count[myword]
-                globaldb_ref.document(myword).set({u'count' : new_word_count})
+                globaldb[myword] = word_count[myword]
+        globaldb_ref.set(globaldb)
 
     def get_global_db(self, word_count):
         global_word_count = dict()
-        globaldb = self.__db__.collection(u'GlobalWordCounts').stream()
-        for word in globaldb:
-            if word.id in word_count.keys():
-                global_word_count[word.id] = word.to_dict()['count']
+        globaldb = self.__db__.reference('GlobalWordCounts').get()
+        for word in word_count.keys():
+            db_word = globaldb[word]
+            if db_word:
+                global_word_count[word] = db_word['count']
         return global_word_count
 
     def update_response_word_count_db(self, DocId, word_count):
-        responsedb_ref = self.__db__.collection(u'ResponseWordCount').document(DocId).collection(u'Words')
-        for myword in word_count.keys():
-            new_word_count = word_count[myword]
-            responsedb_ref.document(myword).set({u'count' : new_word_count})
+        self.__db__.reference('ResponseWordCount').child(DocId).set(word_count)
 
     def update_response_frequencies_db(self, DocId, sorted_freq_count):
-        responsedb_ref = self.__db__.collection(u'ResponseFrequencies').document(DocId).collection(u'Frequencies')
-        for freq in sorted_freq_count.keys():
-            new_word_count = sorted_freq_count[freq]
-            responsedb_ref.document(str(freq)).set({u'words' : new_word_count})
+        self.__db__.reference('ResponseFrequencies').child(DocId).set(sorted_freq_count)
         
