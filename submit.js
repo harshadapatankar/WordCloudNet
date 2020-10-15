@@ -38,10 +38,21 @@ function submitForm(e){
         } else {
             // Data saved successfully!
             alertText += "Text Submitted";
+            // invoke php on the server to in turn invoke python
+            var xmlhttp = new XMLHttpRequest();
+            var str = "http://127.0.0.1:8080/Sample.php?DocId="+newPostKey.substr(1);
+            console.log(str);
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == this.DONE) {
+                    alert(alertText);
+                }
+            }
+            xmlhttp.open("GET", str );
+            xmlhttp.send();
         }
     });
     document.getElementById('textForm').reset();
-    return newPostKey;
+    return newPostKey.substr(1);
 }
   
 // Function to get get form values
