@@ -4,7 +4,14 @@ from firebase_admin import firestore
 
 class DabaseAccessor:
     def __init__(self):
-        cred = credentials.Certificate('WordCloudEnv\Scripts\wordcloud-firebase-secretkey.json')
+        import os
+        from sys import platform
+        this_file = os.path.dirname(os.path.abspath(__file__))
+        if platform == "linux" or platform == "linux2" or platform == "darwin":
+            this_file += "/wordCloudEnv/bin/wordcloud-firebase-secretkey.json"
+        elif platform == "win32":
+            this_file += "/wordCloudEnv/Scripts/wordcloud-firebase-secretkey.json"
+        cred = credentials.Certificate(this_file)
         firebase_admin.initialize_app(cred)
         self.__db__ = firestore.client()
 
