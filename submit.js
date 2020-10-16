@@ -51,19 +51,22 @@ function submitForm(e){
                         console.log("Frequency : ")
                         console.log(value);
                         var [responseFormatted, responseFontSizes] = parseResponseAndGetFontSizes(value);
-                        var frequencies = Object.keys(responseFontSizes);
+                        var string = '<p style=\"width: 90%; display:inline-block;>';
                         for (var i in responseFontSizes) {
-                            var currFontSizes = responseFontSizes[i];
-                            var currWords = responseFormatted[i];
-                            console.log(document.getElementById("response-area").innerHTML);
-                            var string = document.getElementById("response-area").innerHTML + '<div style=\"width: 90%; display:inline-block; font-size: ' + Math.ceil(currFontSizes).toString() + 'px\">' ;
-                            for (var word in currWords) {
-                                console.log(currWords[word]);
-                                string = string + " " + currWords[word];
+                            if (i > 1) {
+                                var currFontSizes = responseFontSizes[i];
+                                var currWords = responseFormatted[i];
+                                console.log(document.getElementById("response-area").innerHTML);
+                                string = string + '<span style=\"font-size: ' + Math.ceil(currFontSizes).toString() + 'px\">' ;
+                                for (var word in currWords) {
+                                    console.log(currWords[word]);
+                                    string = string + " " + currWords[word];
+                                }
+                                string = string +'</span>';
                             }
-                            string = string +'</div> \n';
-                            document.getElementById("response-area").innerHTML = string;
                         }
+                        string = string + "</p>";
+                        document.getElementById("response-area").innerHTML = string;
                         document.getElementById('textForm').reset();
                         console.log("Mean = "+ mean);
                         console.log("STD = "+ std);
@@ -101,17 +104,19 @@ function parseResponseAndGetFontSizes(response) {
     var responseFontSizes = { };
     for (var elements in response) {
         //console.log(elements);
-        var arr = [];
-        var flag = false;
-        for (var words in response[elements]) {
-            flag = true;
-            arr.push(response[elements][words]);
-        }
-        if(flag) {
-            responseDict[elements] = arr;
-            lengths.push(arr.length);
-            console.log(arr.length);
-            totalWords = totalWords + arr.length;
+        if( elements > 1) {
+            var arr = [];
+            var flag = false;
+            for (var words in response[elements]) {
+                flag = true;
+                arr.push(response[elements][words]);
+            }
+            if(flag) {
+                responseDict[elements] = arr;
+                lengths.push(arr.length);
+                console.log(arr.length);
+                totalWords = totalWords + arr.length;
+            }
         }
     }
     mean = totalWords/lengths.length;
