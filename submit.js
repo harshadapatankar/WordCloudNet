@@ -50,8 +50,20 @@ function submitForm(e){
                         var value = (snapshot.val()) || 'Error';
                         console.log("Frequency : ")
                         console.log(value);
-                        var responseFormatted = parseResponseAndGetDict(value);
-                        document.getElementById("response-area").innerHTML = '<pre>' + JSON.stringify(responseFormatted) + '</pre>';
+                        var [responseFormatted, responseFontSizes] = parseResponseAndGetFontSizes(value);
+                        var frequencies = Object.keys(responseFontSizes);
+                        for (var i in responseFontSizes) {
+                            var currFontSizes = responseFontSizes[i];
+                            var currWords = responseFormatted[i];
+                            console.log(document.getElementById("response-area").innerHTML);
+                            var string = document.getElementById("response-area").innerHTML + '<div style=\"width: 90%; display:inline-block; font-size: ' + Math.ceil(currFontSizes).toString() + 'px\">' ;
+                            for (var word in currWords) {
+                                console.log(currWords[word]);
+                                string = string + " " + currWords[word];
+                            }
+                            string = string +'</div> \n';
+                            document.getElementById("response-area").innerHTML = string;
+                        }
                         document.getElementById('textForm').reset();
                         console.log("Mean = "+ mean);
                         console.log("STD = "+ std);
@@ -82,7 +94,7 @@ function ncdf(x, mean, std) {
     return 1 - prob;
 }
 
-function parseResponseAndGetDict(response) {
+function parseResponseAndGetFontSizes(response) {
     var responseDict = { };
     var lengths = [];
     var totalWords = 0;
@@ -109,7 +121,7 @@ function parseResponseAndGetDict(response) {
         console.log("Font size for words with frequency "+ keys[i] + " = " + Math.max(15, (40*(ncdf(lengths[i],mean, std)))));
         responseFontSizes[keys[i]] = Math.max(15, (40*(ncdf(lengths[i],mean, std))));
     }
-    return responseDict;
+    return [responseDict, responseFontSizes];
 }
 
 function getStandardDeviation (array) {
