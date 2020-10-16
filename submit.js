@@ -53,6 +53,8 @@ function submitForm(e){
                         var responseFormatted = parseResponseAndGetDict(value);
                         document.getElementById("response-area").innerHTML = '<pre>' + JSON.stringify(responseFormatted) + '</pre>';
                         document.getElementById('textForm').reset();
+                        console.log("Mean = "+ mean);
+                        console.log("STD = "+ std);
                     });
                 }
             }
@@ -68,19 +70,25 @@ function getInputVal(id){
 return document.getElementById(id).value;
 }
 
+var mean;
+var std;
+
 function ncdf(x, mean, std) {
     var x = (x - mean) / std;
     var t = 1 / (1 + .2315419 * Math.abs(x));
     var d =.3989423 * Math.exp( -x * x / 2);
     var prob = d * t * (.3193815 + t * ( -.3565638 + t * (1.781478 + t * (-1.821256 + t * 1.330274))));
     if( x > 0 ) prob = 1 - prob;
-    return prob;
+    return 1 - prob;
 }
 
 function parseResponseAndGetDict(response) {
     var responseDict = { };
+    var lengths = [];
+    var totalWords = 0;
+    var responseFontSizes = { };
     for (var elements in response) {
-        console.log(elements);
+        //console.log(elements);
         var arr = [];
         var flag = false;
         for (var words in response[elements]) {
@@ -89,7 +97,23 @@ function parseResponseAndGetDict(response) {
         }
         if(flag) {
             responseDict[elements] = arr;
+            lengths.push(arr.length);
+            console.log(arr.length);
+            totalWords = totalWords + arr.length;
         }
+    }
+    mean = totalWords/lengths.length;
+    std = getStandardDeviation(lengths);
+    var keys = Object.keys(responseDict);
+    for(var i in lengths) {
+        console.log("Font size for words with frequency "+ keys[i] + " = " + Math.max(15, (40*(ncdf(lengths[i],mean, std)))));
+        responseFontSizes[keys[i]] = Math.max(15, (40*(ncdf(lengths[i],mean, std))));
     }
     return responseDict;
 }
+
+function getStandardDeviation (array) {
+    const n = array.length;
+    const mean = array.reduce((a, b) => a + b) / n
+    return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
+  }

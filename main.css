@@ -16,6 +16,14 @@ body {
     border-left: none;
 }
 
+#wrapper {
+   display: grid;
+   grid-template-columns: 80px 200px auto 30px;
+   grid-gap: 10px;
+   background-color: rgb(158, 157, 167);
+   padding: 10px;
+}
+
 #keyword {
     width: 300px;
 }
