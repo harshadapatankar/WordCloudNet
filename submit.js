@@ -1,3 +1,153 @@
+const CSS_COLOR_NAMES = [
+    "AliceBlue",
+    "AntiqueWhite",
+    "Aqua",
+    "Aquamarine",
+    "Azure",
+    "Beige",
+    "Bisque",
+    "Black",
+    "BlanchedAlmond",
+    "Blue",
+    "BlueViolet",
+    "Brown",
+    "BurlyWood",
+    "CadetBlue",
+    "Chartreuse",
+    "Chocolate",
+    "Coral",
+    "CornflowerBlue",
+    "Cornsilk",
+    "Crimson",
+    "Cyan",
+    "DarkBlue",
+    "DarkCyan",
+    "DarkGoldenRod",
+    "DarkGray",
+    "DarkGrey",
+    "DarkGreen",
+    "DarkKhaki",
+    "DarkMagenta",
+    "DarkOliveGreen",
+    "DarkOrange",
+    "DarkOrchid",
+    "DarkRed",
+    "DarkSalmon",
+    "DarkSeaGreen",
+    "DarkSlateBlue",
+    "DarkSlateGray",
+    "DarkSlateGrey",
+    "DarkTurquoise",
+    "DarkViolet",
+    "DeepPink",
+    "DeepSkyBlue",
+    "DimGray",
+    "DimGrey",
+    "DodgerBlue",
+    "FireBrick",
+    "FloralWhite",
+    "ForestGreen",
+    "Fuchsia",
+    "Gainsboro",
+    "GhostWhite",
+    "Gold",
+    "GoldenRod",
+    "Gray",
+    "Grey",
+    "Green",
+    "GreenYellow",
+    "HoneyDew",
+    "HotPink",
+    "IndianRed",
+    "Indigo",
+    "Ivory",
+    "Khaki",
+    "Lavender",
+    "LavenderBlush",
+    "LawnGreen",
+    "LemonChiffon",
+    "LightBlue",
+    "LightCoral",
+    "LightCyan",
+    "LightGoldenRodYellow",
+    "LightGray",
+    "LightGrey",
+    "LightGreen",
+    "LightPink",
+    "LightSalmon",
+    "LightSeaGreen",
+    "LightSkyBlue",
+    "LightSlateGray",
+    "LightSlateGrey",
+    "LightSteelBlue",
+    "LightYellow",
+    "Lime",
+    "LimeGreen",
+    "Linen",
+    "Magenta",
+    "Maroon",
+    "MediumAquaMarine",
+    "MediumBlue",
+    "MediumOrchid",
+    "MediumPurple",
+    "MediumSeaGreen",
+    "MediumSlateBlue",
+    "MediumSpringGreen",
+    "MediumTurquoise",
+    "MediumVioletRed",
+    "MidnightBlue",
+    "MintCream",
+    "MistyRose",
+    "Moccasin",
+    "NavajoWhite",
+    "Navy",
+    "OldLace",
+    "Olive",
+    "OliveDrab",
+    "Orange",
+    "OrangeRed",
+    "Orchid",
+    "PaleGoldenRod",
+    "PaleGreen",
+    "PaleTurquoise",
+    "PaleVioletRed",
+    "PapayaWhip",
+    "PeachPuff",
+    "Peru",
+    "Pink",
+    "Plum",
+    "PowderBlue",
+    "Purple",
+    "RebeccaPurple",
+    "Red",
+    "RosyBrown",
+    "RoyalBlue",
+    "SaddleBrown",
+    "Salmon",
+    "SandyBrown",
+    "SeaGreen",
+    "SeaShell",
+    "Sienna",
+    "Silver",
+    "SkyBlue",
+    "SlateBlue",
+    "SlateGray",
+    "SlateGrey",
+    "Snow",
+    "SpringGreen",
+    "SteelBlue",
+    "Tan",
+    "Teal",
+    "Thistle",
+    "Tomato",
+    "Turquoise",
+    "Violet",
+    "Wheat",
+    "White",
+    "WhiteSmoke",
+    "Yellow",
+    "YellowGreen",
+  ];
 var documetId = null;
 var firebaseConfig = {
     apiKey: "AIzaSyDztnNjfhUtjVtLxi9kv0SjkH03uCGMQxw",
@@ -50,20 +200,20 @@ function submitForm(e){
                         var value = (snapshot.val()) || 'Error';
                         console.log("Frequency : ")
                         console.log(value);
-                        var [responseFormatted, responseFontSizes] = parseResponseAndGetFontSizes(value);
-                        var string = '<p style=\"width: 90%; display:inline-block;>';
+                        var [responseFormatted, responseFontSizes, frequencyColor] = parseResponseAndGetFontSizes(value);
+                        var string = '<p style=\"width: 90%; display:inline-block;\">\n';
                         for (var i in responseFontSizes) {
-                            if (i > 1) {
                                 var currFontSizes = responseFontSizes[i];
                                 var currWords = responseFormatted[i];
+                                var currColor = frequencyColor[i];
+                                console.log(currColor);
                                 console.log(document.getElementById("response-area").innerHTML);
-                                string = string + '<span style=\"font-size: ' + Math.ceil(currFontSizes).toString() + 'px\">' ;
+                                string = string + '<span style=\"font-size: ' + Math.ceil(currFontSizes).toString() + 'px; color: ' + currColor.toString() + ';\">';
                                 for (var word in currWords) {
                                     console.log(currWords[word]);
                                     string = string + " " + currWords[word];
                                 }
                                 string = string +'</span>';
-                            }
                         }
                         string = string + "</p>";
                         document.getElementById("response-area").innerHTML = string;
@@ -102,9 +252,27 @@ function parseResponseAndGetFontSizes(response) {
     var lengths = [];
     var totalWords = 0;
     var responseFontSizes = { };
+    var colorsBasedOnFrequency = { };
+    // calculate mean, and display certail imp words only
     for (var elements in response) {
         //console.log(elements);
-        if( elements > 1) {
+        var arr = [];
+        var flag = false;
+        for (var words in response[elements]) {
+            flag = true;
+            arr.push(response[elements][words]);
+        }
+        if(flag) {
+            lengths.push(arr.length);
+            console.log(arr.length);
+            totalWords = totalWords + arr.length;
+        }
+    }
+    var meanOfWords = totalWords/lengths.length;
+    var frequencies = [];
+    var totalOfFrequencies = 0;
+    for (var elements in response) {
+        if( response[elements].length < meanOfWords) {
             var arr = [];
             var flag = false;
             for (var words in response[elements]) {
@@ -113,24 +281,69 @@ function parseResponseAndGetFontSizes(response) {
             }
             if(flag) {
                 responseDict[elements] = arr;
-                lengths.push(arr.length);
-                console.log(arr.length);
-                totalWords = totalWords + arr.length;
+                frequencies.push(parseInt(elements));
+                console.log(elements);
+                totalOfFrequencies = totalOfFrequencies + parseInt(elements);
             }
         }
     }
-    mean = totalWords/lengths.length;
-    std = getStandardDeviation(lengths);
+    console.log(frequencies);
+    mean = totalOfFrequencies/frequencies.length;
+    std = getStandardDeviation(frequencies);
+    console.log("Debug = "+ totalOfFrequencies + " " + mean + " " + std);
     var keys = Object.keys(responseDict);
-    for(var i in lengths) {
-        console.log("Font size for words with frequency "+ keys[i] + " = " + Math.max(15, (40*(ncdf(lengths[i],mean, std)))));
-        responseFontSizes[keys[i]] = Math.max(15, (40*(ncdf(lengths[i],mean, std))));
+    for(var i in frequencies) {
+        console.log("Font size for words with frequency "+ keys[i] + " = " + Math.max(10, (100*(1-ncdf(frequencies[i],mean, std)))));
+        responseFontSizes[keys[i]] = Math.max(10,(100*(1-ncdf(frequencies[i],mean, std))));
+        colorsBasedOnFrequency[keys[i]] = colorExtract(1-ncdf(frequencies[i],mean, std*2));
     }
-    return [responseDict, responseFontSizes];
+    return [responseDict, responseFontSizes, colorsBasedOnFrequency];
 }
 
 function getStandardDeviation (array) {
     const n = array.length;
     const mean = array.reduce((a, b) => a + b) / n
     return Math.sqrt(array.map(x => Math.pow(x - mean, 2)).reduce((a, b) => a + b) / n)
-  }
+}
+
+
+//This is a special-case, not a generic solution, but by simply doing a linear gradient between hues and scrunching the blend in the middle range (i.e. the green) you can get a reasonable approximation without color stepping:
+// reference https://stackoverflow.com/questions/16399677/set-background-color-based-on-outdoor-temperature
+function colorExtract(t)
+{
+    var a = Math.max(0.5, (t+0.5)/1.5);
+    // Scrunch the green/cyan range in the middle
+    var sign = (a < .5) ? -1 : 1;
+    a = sign * Math.pow(2 * Math.abs(a - .5), .35)/2 + .5;
+    // Linear interpolation between the cold and hot
+    var h0 = 259;
+    var h1 = 12;
+    var h = (h0) * (1 - a) + (h1) * (a);
+    var rgb = HSVtoRGB(h, 0.65, 0.75);
+    var color = "rgb("+rgb['r'].toString()+","+rgb['g'].toString()+","+rgb['b'].toString()+")";
+    return color;
+};
+
+function HSVtoRGB(h, s, v) {
+    var r, g, b, i, f, p, q, t;
+    if (arguments.length === 1) {
+        s = h.s, v = h.v, h = h.h;
+    }
+    i = Math.floor(h * 6);
+    f = h * 6 - i;
+    p = v * (1 - s);
+    q = v * (1 - f * s);
+    t = v * (1 - (1 - f) * s);
+    switch (i % 6) {
+        case 0: r = v, g = t, b = p; break;
+        case 1: r = q, g = v, b = p; break;
+        case 2: r = p, g = v, b = t; break;
+        case 3: r = p, g = q, b = v; break;
+        case 4: r = t, g = p, b = v; break;
+        case 5: r = v, g = p, b = q; break;
+    }
+    return {
+        'r': Math.round(r * 255),
+        'g': Math.round(g * 255),
+        'b': Math.round(b * 255) };
+}
