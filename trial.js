@@ -74,6 +74,7 @@ function submitForm(e){
                         for (var key in responseFontSizes){
                             //if (key in responseFormatted){
                                 words_list = responseFormatted[key].join(" ");
+                                reponse_invert = 
                                 
                                 console.log("words separated: "+words_list);
                                 //console.log("lol: "+responseFormatted[key].join(" "));
