@@ -8,6 +8,13 @@
         <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-firestore.js"></script>
         <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
         <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script>
+            function redirect(id){
+                var win = window.open("https://www.bing.com/search?q="+id, '_blank');
+                win.focus();
+            }
+        </script>
         <script type="module" src="havefun.js"></script>
     </head>
     <body>
@@ -22,6 +29,7 @@
                     <input type="submit" value="Submit">
                 </form>
             </div>
+            <div id="response-info" style="border: 1px solid black; min-height: 10px; text-align: left;">Hover on any word to reveal: </div>
             <div id="response-area" style="border: 1px solid black;">
             </div>
         </div>

@@ -148,6 +148,7 @@ const CSS_COLOR_NAMES = [
     "Yellow",
     "YellowGreen",
   ];
+
 var documetId = null;
 var firebaseConfig = {
     apiKey: "AIzaSyDztnNjfhUtjVtLxi9kv0SjkH03uCGMQxw",
@@ -196,31 +197,41 @@ function submitForm(e){
                 if (this.readyState == this.DONE) {
                     //alert(alertText);
                     var postId = responseKey;
+                    firebase.database().ref('GlobalWordCounts/').orderByKey().once('value').then(function(snapshot) {
+                        var GlobalVal = (snapshot.val()) || 'Error';
+                        console.log(GlobalVal)
                     firebase.database().ref('ResponseFrequencies/' + postId).orderByKey().once('value').then(function(snapshot) {
                         var value = (snapshot.val()) || 'Error';
                         console.log("Frequency : ")
                         console.log(value);
-                        var [responseFormatted, responseFontSizes, frequencyColor] = parseResponseAndGetFontSizes(value);
+                        var [responseFormatted, responseFontSizes, frequencyColor, localWordCountDict] = parseResponseAndGetFontSizes(value);
+                        console.log(localWordCountDict);
                         var string = '<p style=\"width: 90%; display:inline-block;\">\n';
+                        var hidden = "";
                         for (var i in responseFontSizes) {
                                 var currFontSizes = responseFontSizes[i];
                                 var currWords = responseFormatted[i];
                                 var currColor = frequencyColor[i];
                                 console.log(currColor);
                                 console.log(document.getElementById("response-area").innerHTML);
-                                string = string + '<span style=\"font-size: ' + Math.ceil(currFontSizes).toString() + 'px; color: ' + currColor.toString() + ';\">';
                                 for (var word in currWords) {
+                                    string = string + '<span style=\"font-size: ' + Math.ceil(currFontSizes).toString() + 'px; color: ' + currColor.toString() +';\"';
+                                    string = string + 'onmouseover=\"document.getElementById(\'' + currWords[word]  + '\').style.display=\'inline\'\";' + ' onmouseout=\"document.getElementById(\'' + currWords[word]  + '\').style.display=\'none\'\";';
+                                    string = string + ' onclick=\"redirect(\'' + currWords[word]  + '\'); return false\"';
+                                    string = string + '>';
                                     console.log(currWords[word]);
                                     string = string + " " + currWords[word];
+                                    string = string +'</span>';
+                                    hidden = hidden + '<span id=\"'+ currWords[word] +'\" style=\"display: none;\"> Word count in curr text = '+ localWordCountDict[currWords[word]]  +'; Until today seen for '+ GlobalVal[currWords[word]]  +' number of times; ' + 'Click the word to more about it </span>  \n';
                                 }
-                                string = string +'</span>';
                         }
                         string = string + "</p>";
                         document.getElementById("response-area").innerHTML = string;
+                        document.getElementById("response-info").innerHTML = document.getElementById("response-info").innerHTML + hidden;
                         document.getElementById('textForm').reset();
                         console.log("Mean = "+ mean);
                         console.log("STD = "+ std);
-                    });
+                    }); });
                 }
             }
             xmlhttp.open("GET", str );
@@ -249,6 +260,7 @@ function ncdf(x, mean, std) {
 
 function parseResponseAndGetFontSizes(response) {
     var responseDict = { };
+    var localWordCountDict = { };
     var lengths = [];
     var totalWords = 0;
     var responseFontSizes = { };
@@ -278,6 +290,7 @@ function parseResponseAndGetFontSizes(response) {
             for (var words in response[elements]) {
                 flag = true;
                 arr.push(response[elements][words]);
+                localWordCountDict[response[elements][words]]=elements;
             }
             if(flag) {
                 responseDict[elements] = arr;
@@ -297,7 +310,7 @@ function parseResponseAndGetFontSizes(response) {
         responseFontSizes[keys[i]] = Math.max(10,(100*(1-ncdf(frequencies[i],mean, std))));
         colorsBasedOnFrequency[keys[i]] = colorExtract(1-ncdf(frequencies[i],mean, std*2));
     }
-    return [responseDict, responseFontSizes, colorsBasedOnFrequency];
+    return [responseDict, responseFontSizes, colorsBasedOnFrequency, localWordCountDict];
 }
 
 function getStandardDeviation (array) {
@@ -322,7 +335,7 @@ function colorExtract(t)
     var rgb = HSVtoRGB(h, 0.65, 0.75);
     var color = "rgb("+rgb['r'].toString()+","+rgb['g'].toString()+","+rgb['b'].toString()+")";
     return color;
-};
+}
 
 function HSVtoRGB(h, s, v) {
     var r, g, b, i, f, p, q, t;
@@ -347,3 +360,13 @@ function HSVtoRGB(h, s, v) {
         'g': Math.round(g * 255),
         'b': Math.round(b * 255) };
 }
+
+jQuery(document).ready(function() {
+    $('#response-area ul:first-child > li').hover(function() {
+        $(this).children("ul").slideToggle('slow');
+    });
+    
+    $('#response-area ul:not(:first-child) > li').click(function(){
+        $(this).children("ul").slideToggle('slow');
+    });
+});
