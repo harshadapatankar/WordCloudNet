@@ -191,7 +191,7 @@ function submitForm(e){
             alertText += "Text Submitted";
             // invoke php on the server to in turn invoke python
             var xmlhttp = new XMLHttpRequest();
-            var str = "/Sample.php?DocId="+responseKey;
+            var str = "http://2cd7d7d.online-server.cloud/Sample.php?DocId="+responseKey;
             console.log(str);
             xmlhttp.onreadystatechange = function() {
                 if (this.readyState == this.DONE) {
