@@ -20,7 +20,7 @@ if not (dbData):
     print("No such document")
     exit()
 
-text = dbData['Text']
+text = dbData['text']
 
 #translate text if not english
 translator = Translator()
@@ -58,11 +58,8 @@ stemmer = SnowballStemmer("english")
 stopWords = nltk.corpus.stopwords.words('english')
 lemmatizer = WordNetLemmatizer()
 text, stem_words = alterText(text, stemmer, stopWords, lemmatizer)
-print(text)
 
-#word -> count
-#count -> [word1, word1]
-
+#word -> count (Logical Representation)
 word_count = dict()
 for word in text:
     if word != '':
@@ -75,7 +72,8 @@ dbAccessor.update_global_db(word_count)
 #print(dbAccessor.get_global_db(word_count))
 dbAccessor.update_response_word_count_db(documentId, word_count)
 
-freq_to_words = dict()        
+#count -> [word1, word2.....] (Logical Representation)
+freq_to_words = dict()         
 for word in word_count.keys():
     freq = word_count[word]
     if freq in freq_to_words.keys():

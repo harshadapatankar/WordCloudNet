@@ -9,13 +9,15 @@
         <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
         <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        
         <script>
             function redirect(id){
                 var win = window.open("https://www.bing.com/search?q="+id, '_blank');
                 win.focus();
             }
         </script>
-        <script type="module" src="submit.js"></script>
+        <!-- <script type="module" src="submit.js"></script> -->
+        <script type = "module" src="binpacking.js"></script>
     </head>
     <body>
         <p style="position: absolute; right:0; top: 0" id="status"></p>
@@ -30,12 +32,11 @@
                 </form>
             </div>
             <div id="response-info" style="border: 1px solid black; min-height: 10px; text-align: left;"> <b><span style="font-size: 22px">Hover on any word to reveal:</span></b> </div>
-            <div id="response-area" style="border: 1px solid black;">
-                <!-- <canvas id='canvas'></canvas>
-                <script>
-                    var canvas = documennt.getElementById("canvas");
-                    var context = 
-                </script> -->
+            <!-- <div id="response-area" style="border: 1px solid black;"> -->
+                <canvas id='canvas'> </canvas>
+                    <script type = "text/javascript" src="binpacking.js"></script>
+                    <script type="text/javascript" src="trial.js"> </script>
+                
             </div>
         
         </div>
