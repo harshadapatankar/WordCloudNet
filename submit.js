@@ -206,6 +206,8 @@ function submitForm(e){
                         console.log(value);
                         var [responseFormatted, responseFontSizes, frequencyColor, localWordCountDict] = parseResponseAndGetFontSizes(value);
                         console.log(localWordCountDict);
+                        console.log(responseFormatted);
+                        console.log(responseFontSizes);
                         var string = '<p style=\"width: 90%; display:inline-block;\">\n';
                         var hidden = "";
                         for (var i in responseFontSizes) {
@@ -224,6 +226,7 @@ function submitForm(e){
                                     string = string +'</span>';
                                     hidden = hidden + '<span id=\"'+ currWords[word] +'\" style=\"display: none;\"> Word count in curr text = '+ localWordCountDict[currWords[word]]  +'; Until today seen for '+ GlobalVal[currWords[word]]  +' number of times; ' + 'Click the word to more about it </span>  \n';
                                 }
+
                         }
                         string = string + "</p>";
                         document.getElementById("response-area").innerHTML = string;
@@ -231,6 +234,8 @@ function submitForm(e){
                         document.getElementById('textForm').reset();
                         console.log("Mean = "+ mean);
                         console.log("STD = "+ std);
+                        
+                        
                     }); });
                 }
             }
@@ -300,7 +305,8 @@ function parseResponseAndGetFontSizes(response) {
             }
         }
     }
-    console.log(frequencies);
+    console.log("freq:"+frequencies);
+    
     mean = totalOfFrequencies/frequencies.length;
     std = getStandardDeviation(frequencies);
     console.log("Debug = "+ totalOfFrequencies + " " + mean + " " + std);
@@ -312,6 +318,7 @@ function parseResponseAndGetFontSizes(response) {
     }
     return [responseDict, responseFontSizes, colorsBasedOnFrequency, localWordCountDict];
 }
+    
 
 function getStandardDeviation (array) {
     const n = array.length;
