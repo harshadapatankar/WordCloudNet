@@ -68,38 +68,28 @@ function submitForm(e){
 
                         //debug.html
                         var rects = [];
-                        Object.entries(responseFormatted).forEach(([key, val]) => console.log(key, val));
+                        //Object.entries(responseFormatted).forEach(([key, val]) => console.log(key, val));
                         
                         
-                        for (var key in responseFontSizes){
-                            //if (key in responseFormatted){
-                                words_list = responseFormatted[key].join(" ");
-                                reponse_invert = 
-                                
-                                console.log("words separated: "+words_list);
-                                //console.log("lol: "+responseFormatted[key].join(" "));
-                            
-                                for (var i in responseFontSizes){
-                                   // for(var k in j){
-                                        console.log("i:"+responseFontSizes[key]);
-                                        var currWord = words_list;
-                                        var currFontSizes = responseFontSizes[key];
-                                        // Measure the word's size
-                                        context.font = currFontSizes + "px Arial";
-                                        context.textAlign = "center";
-                                        var wordWidth = context.measureText(currWord).width;
+                        for (var key in localWordCountDict){
+                            console.log("i:"+responseFontSizes[key]);
+                            var currWord = key;
+                            var currFontSizes = responseFontSizes[localWordCountDict[key]];
+                            // Measure the word's size
+                            context.font = currFontSizes + "px Arial";
+                            context.textAlign = "center";
+                            var wordWidth = context.measureText(currWord).width;
 
-                                        // Place all the words randomly
-                                        var rect = new binpacking.Rect(Math.random() * 600,Math.random() * 600,wordWidth+5,currFontSizes+5);
+                            // Place all the words randomly
+                            var rect = new binpacking.Rect(Math.random() * 600,Math.random() * 600,wordWidth+5,currFontSizes+5);
 
-                                        // Store some meta-information
-                                        rect.addProperty("fontSize", currFontSizes);
-                                        rect.addProperty("text", currWord);
+                            // Store some meta-information
+                            rect.addProperty("fontSize", currFontSizes);
+                            rect.addProperty("text", currWord);
 
-                                        rects.push(rect);
+                            rects.push(rect);
                                // }
                                // }
-                            }
                         }
                         
 
