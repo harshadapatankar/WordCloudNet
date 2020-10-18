@@ -82,7 +82,6 @@ function submitForm(e){
                             var wordWidth = context.measureText(currWord).width;
 
                             // Place all the words randomly
-                           // var rect = new binpacking.Rect(Math.random() * 400,Math.random() * 400,wordWidth+2,currFontSizes+2);
                            var rect = new binpacking.Rect(450,450,wordWidth+2,currFontSizes+2);
 
 
@@ -119,24 +118,16 @@ function submitForm(e){
                                 context.strokeRect(r.left , r.top, r.width , r.height );
                                 context.font = fontSize/10 + "px Calibri";
                                 context.fillText(placedRects[i-1].getProperty("freq"),r.right + 5 ,r.bottom + 5);
-                               // context.strokeRect(r.right + 6, r.bottom + 6, r.width, r.height);
-                               // context.fillText(placedRects[i-1].getProperty("freq"),r.right + 5 ,r.bottom + 5);
+                              
                               } 
                               else{
                                 context.strokeStyle = "#FFFFFF"; 
                                 context.strokeRect(r.left , r.top , r.width , r.height );
-                                //context.fillStyle = "#FFFFFF";
-                                //context.fillText(placedRects[i-1].getProperty("freq"),r.right + 5 ,r.bottom + 5);
+                                
                               }
                               
                             }  
                         }
-
-                        
-                        // Fill with gradient
-                        //ctx.fillStyle = gradient;
-                        //ctx.fillText("Big smile!", 10, 90);
-                        var currColor
                         // Draw the text into each rect
                         context.fillStyle = "#000";
                         for (var i = 0;i < placedRects.length;i++){
@@ -145,96 +136,8 @@ function submitForm(e){
                             //context.translate(canvas.width, canvas.height);
                             //context.rotate(Math.PI / 2);
                             context.fillText(placedRects[i].getProperty("text"), placedRects[i].x, placedRects[i].y + fontSize/4);
-                            context.fillStyle = 'hsl(' + 360 * Math.random() + ', 50%, 50%)';
+                            context.fillStyle = frequencyColor[placedRects[i].getProperty("freq")];
 		}
-
-                        // // Draw the area that the rects will show up in
-                        // area.draw(context);
-
-                        // // Draw the rects in their initial position
-                        // for (var i = 0; i < rects.length;i++){
-                        //     rects[i].draw(context);
-                        // }
-
-                        // // Fade all the previous drawings to show that they are just the initial positions
-                        // context.globalAlpha = .7;
-                        // context.fillStyle = "#fff";
-                        // context.fillRect(0,0,canvas.width, canvas.height);
-
-                        // var placedRects = binpacking.pack(area, rects, 10);
-
-                        // // Draw the rects in their final position
-                        // context.globalAlpha = 1;
-                        // for (var i = 0; i < placedRects.length;i++){
-                        //     placedRects[i].draw(context);
-                        // }
-
-                        // // Draw the text into each rect
-                        // context.fillStyle = "#000";
-                        // for (var i = 0;i < placedRects.length;i++){
-                        //     var fontSize = placedRects[i].getProperty("fontSize");
-                        //     context.font = fontSize + "px Arial";
-                        //     context.fillText(placedRects[i].getProperty("text"), placedRects[i].x, placedRects[i].y + fontSize/4);
-                        // }
-
-                        //simple.html
-                        // var rects = [];
-                        // for (var i = 0;i < 20;i++){
-                        //     rects.push(new binpacking.Rect(
-                        //         Math.random() * 100 - 50 + 300,
-                        //         Math.random() * 100 - 50 + 300,
-                        //         50+Math.pow(Math.random(),2) * 300,
-                        //         50+Math.pow(Math.random(),2) * 300));
-                        // }
-
-                        // rects.sort(function(a,b){
-                        //     return b.size - a.size;
-                        // });
-
-                        // context.globalAlpha = .3;
-                        // area.draw(context);
-                        // for (var i = 0; i < rects.length;i++){
-                        //     rects[i].draw(context);
-                        // }
-                        // context.globalAlpha = .3;
-                        // context.fillStyle = "#fff";
-                        // context.fillRect(0,0,canvas.width, canvas.height);
-                        // context.globalAlpha = 1;
-
-                        // var placedRects = binpacking.pack(area, rects, 10);
-                        // for (var i = 0; i < placedRects.length;i++){
-                        //     placedRects[i].draw(context);
-                        // }
-
-                       
-
-                        
-                        // var string = '<p style=\"width: 90%; display:inline-block;\">\n';
-                        // var hidden = "";
-                        // for (var i in responseFontSizes) {
-                        //         var currFontSizes = responseFontSizes[i];
-                        //         var currWords = responseFormatted[i];
-                        //         var currColor = frequencyColor[i];
-                        //         console.log(currColor);
-                        //         console.log(document.getElementById("response-area").innerHTML);
-                        //         for (var word in currWords) {
-                        //             string = string + '<span style=\"font-size: ' + Math.ceil(currFontSizes).toString() + 'px; color: ' + currColor.toString() +';\"';
-                        //             string = string + 'onmouseover=\"document.getElementById(\'' + currWords[word]  + '\').style.display=\'inline\'\";' + ' onmouseout=\"document.getElementById(\'' + currWords[word]  + '\').style.display=\'none\'\";';
-                        //             string = string + ' onclick=\"redirect(\'' + currWords[word]  + '\'); return false\"';
-                        //             string = string + '>';
-                        //             console.log(currWords[word]);
-                        //             string = string + " " + currWords[word];
-                        //             string = string +'</span>';
-                        //             hidden = hidden + '<span id=\"'+ currWords[word] +'\" style=\"display: none;\"> Word count in curr text = '+ localWordCountDict[currWords[word]]  +'; Until today seen for '+ GlobalVal[currWords[word]]  +' number of times; ' + 'Click the word to more about it </span>  \n';
-                        //         }
-                                
-                        //}
-                        //string = string + "</p>";
-                        //document.getElementById("response-area").innerHTML = string;
-                        //document.getElementById("response-info").innerHTML = document.getElementById("response-info").innerHTML + hidden;
-                        //document.getElementById('textForm').reset();
-                        console.log("Mean = "+ mean);
-                        //console.log("STD = "+ std);
                         
                         
                     }); });
