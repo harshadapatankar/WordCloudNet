@@ -1,12 +1,7 @@
 var binpacking = (function(){
 
-    // How much to move a Rect outward each step
-    //
-    var closenessStep = 0.1;
-
-    // How many degrees to travel to search for a new placement
-    // around the center Rect point
-    var radialStep = 3;
+    var outwardStep = 0.1; //variable to move currect rect out by to check for collision avoidance
+    var radialStep = 3; //variable to turn in the circular patter to avoid collision with curent rect list
     
     /**
      * Packs rects within area and returns new list with rects in correct
@@ -14,25 +9,23 @@ var binpacking = (function(){
      * 
      * @param area Rect: Area to pack rects within
      * @param rects [Rect]: List of rects sorted in order of importance
-     * @param maxDistanceFactor: Size to distance ratio for rect to be from center
-     *                           ex) 2 means rect could not be more than 2 of it's
-     *                           size away
+     * @param maxDistance: Size to distance ratio for rect to be from center
      * @return Non-overlapping packed rects
      **/
-    function pack(area, rects, maxDistanceFactor){
-        var placedRects = [];
+    function pack(area, rects, maxDistance){
+        var finalRects = []; //variable to hold position of all words on the final canvas
         var unplaced = 0;
         for (var i = 0;i < rects.length;i++){
-            var placedRect = placeRect(rects[i], placedRects, area, maxDistanceFactor);
-            if (placedRect == null){
+            var currenRect = placeRect(rects[i], finalRects, area, maxDistance); //variable to store current rect
+            if (currenRect == null){
                 // Rect could not be placed
                 unplaced++;
             }else{
-                placedRects.push(placedRect);
+                finalRects.push(currenRect);
             }
         }
         console.log(unplaced + " rects could not be placed");
-        return placedRects;
+        return finalRects;
     }
 
     /**
@@ -40,16 +33,16 @@ var binpacking = (function(){
      * area to place the rect within.
      *
      * @param rect Rect: A Rect to be placed in the area
-     * @param placedRects [Rect]: List of Rects that could be collided with
+     * @param finalRects [Rect]: List of Rects that could be collided with
      * @param area Rect: Area to place rect within
-     * @param dRatio num: Max distance/size ratio that the rect can be placed
+     * @param maxdist num: Max distance/size ratio that the rect can be placed
      * @return Rect: The place rect (not same object as rect parameter)
      **/
-    function placeRect(rect, placedRects, area, dRatio){
+    function placeRect(rect, finalRects, area, maxdist){
 
         // First check that rect is in the area and there is collision at the
         // original location of the rect
-        if (checkRectWithinArea(rect, area) && !checkCollisions(rect, placedRects)){
+        if (doesRectfit(rect, area) && !checkCollisions(rect, finalRects)){
             // Nothing there! Just place the rect
             //return rect.clone();
             return rect;
@@ -58,22 +51,22 @@ var binpacking = (function(){
         // There was a collision at the rects center location, so
         // we'll check in a circle around the rect with an expanding
         // radius until we're too far away
-        var maxDistance = dRatio * rect.size;
-        var rotationOffset = Math.random() * 180;
-        var newRect = rect.clone();
+        var maxDistance = maxdist * rect.size;
+        var rotateby = Math.random() * 180;
+        var newRect = rect.clone(); //variable to hold the current rect to the final rects dict
         newRect.originalx = rect.x;
         newRect.originaly = rect.y;
 
-        for (var currentRadius = rect.size * closenessStep;
+        for (var currentRadius = rect.size * outwardStep;
              currentRadius < maxDistance;
-             currentRadius += rect.size * closenessStep){
+             currentRadius += rect.size * outwardStep){
             for (var rotation = 0; rotation < 360; rotation += radialStep){
-                var dx = Math.cos(rotationOffset + rotation * (Math.PI/180)) * currentRadius;
-                var dy = Math.sin(rotationOffset + rotation * (Math.PI/180)) * currentRadius;
+                var dx = Math.cos(rotateby + rotation * (Math.PI/180)) * currentRadius;
+                var dy = Math.sin(rotateby + rotation * (Math.PI/180)) * currentRadius;
                 newRect.x = rect.x + dx;
                 newRect.y = rect.y + dy;
                 newRect.calculateBounds(false);
-                if (checkRectWithinArea(newRect, area) && !checkCollisions(newRect, placedRects)){
+                if (doesRectfit(newRect, area) && !checkCollisions(newRect, finalRects)){
                     return newRect;
                 }
 
@@ -88,17 +81,17 @@ var binpacking = (function(){
      * Checks collision of rect against a list of Rects
      * 
      * @param rect Rect: Rect to check collisions against
-     * @param placedRects [Rect]: Rects to check collision
+     * @param finalRects [Rect]: Rects to check collision
      * @return: True if collision, false otherwise
      **/
-    function checkCollisions(rect, placedRects){
-        for (var i = 0; i < placedRects.length; i++){
-            var placedRect = placedRects[i];
+    function checkCollisions(rect, finalRects){
+        for (var i = 0; i < finalRects.length; i++){
+            var currenRect = finalRects[i];
             if (!(
-                    placedRect.left   > rect.right  ||
-                    placedRect.right  < rect.left   ||
-                    placedRect.top    > rect.bottom ||
-                    placedRect.bottom < rect.top
+                    currenRect.left   > rect.right  ||
+                    currenRect.right  < rect.left   ||
+                    currenRect.top    > rect.bottom ||
+                    currenRect.bottom < rect.top
 
                 )) return true;
         }
@@ -112,7 +105,7 @@ var binpacking = (function(){
      * @param area Rect: Area to check that rect is within
      * @return: True if completely within area, else false
      **/
-    function checkRectWithinArea(rect, area){
+    function doesRectfit(rect, area){
         return rect.left > area.left &&
                rect.right < area.right &&
                rect.top > area.top &&
@@ -214,7 +207,7 @@ var binpacking = (function(){
         pack: pack,
         Rect: Rect,
 
-        setClosenessStep: function(v){ closenessStep = v; },
+        setoutwardStep: function(v){ outwardStep = v; },
         setRadialStep: function(v){ radialStep = v; }
 
     };

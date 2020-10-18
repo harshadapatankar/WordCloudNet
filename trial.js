@@ -117,7 +117,7 @@ function submitForm(e){
                               {
                                 context.strokeStyle = "#FF0000"; 
                                 context.strokeRect(r.left , r.top, r.width , r.height );
-                                context.font = fontSize/4 + "px Calibri";
+                                context.font = fontSize/10 + "px Calibri";
                                 context.fillText(placedRects[i-1].getProperty("freq"),r.right + 5 ,r.bottom + 5);
                                // context.strokeRect(r.right + 6, r.bottom + 6, r.width, r.height);
                                // context.fillText(placedRects[i-1].getProperty("freq"),r.right + 5 ,r.bottom + 5);
