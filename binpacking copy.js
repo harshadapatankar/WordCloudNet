@@ -143,7 +143,8 @@ var binpacking = (function(){
      **/
     Rect.prototype.calculateBounds = function(recalculateSize){
         this.left = this.x - this.width/2;
-        this.right = this.x + this.width/2;
+        //this.right = this.x + this.width/2;
+        this.right = this.x +this.width/2;
         this.top = this.y - this.height/2;
         this.bottom = this.y + this.height/2;
         if (recalculateSize !== false){

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title> Word Cloud CECS </title>
+        <link rel="stylesheet" href="main.css">
+        <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.23.0/firebase-firestore.js"></script>
+        <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        
+        <script>
+            function redirect(id){
+                var win = window.open("https://www.bing.com/search?q="+id, '_blank');
+                win.focus();
+            }
+        </script>
+        <!-- <script type="module" src="submit.js"></script> -->
+        <script type = "module" src="binpacking.js"></script>
+    </head>
+    <body>
+        <p style="position: absolute; right:0; top: 0" id="status"></p>
+        <div style="text-align: center">
+            <div id="presets">
+            </div>
+            <div id="custom-area" style="min-width: 900px;">
+                <form id="textForm">
+                    <p><label for="text"> Input your text below!</label>
+                    <p><textarea id="text"></textarea>
+                    <input type="submit" value="Submit">
+                </form>
+            </div>
+            <div id="response-info" style="border: 1px solid black; min-height: 10px; text-align: left;"> <b><span style="font-size: 22px">Hover on any word to reveal:</span></b> </div>
+            <!-- <div id="response-area" style="border: 1px solid black;"> -->
+                <canvas id='canvas'> </canvas>
+                    <script type = "text/javascript" src="binpacking copy.js"></script>
+                    <script type="text/javascript" src="trial copy.js"> </script>
+                
+            </div>
+        
+        </div>
+    </body>
+
+</html>

@@ -82,7 +82,7 @@ function submitForm(e){
                             var wordWidth = context.measureText(currWord).width;
 
                             // Place all the words randomly
-                            var rect = new binpacking.Rect(Math.random() * 600,Math.random() * 600,wordWidth+5,currFontSizes+5);
+                            var rect = new binpacking.Rect(Math.random() * 450,Math.random() * 450,wordWidth+2,currFontSizes+2);
 
                             // Store some meta-information
                             rect.addProperty("fontSize", currFontSizes);
@@ -92,37 +92,7 @@ function submitForm(e){
                                // }
                                // }
                         }
-                        var placedRects = binpacking.pack(area, rects, 10);
-
-                        // Draw the text into each rect
-                        context.fillStyle = "#000";
-                        for (var i = 0;i < placedRects.length;i++){
-                            var fontSize = placedRects[i].getProperty("fontSize");
-                            context.font = fontSize + "px Arial";
-                            context.fillText(placedRects[i].getProperty("text"), placedRects[i].x, placedRects[i].y + fontSize/4);
-                           // context.fillStyle()
-		}
-
-                        // // Draw the area that the rects will show up in
-                        // area.draw(context);
-
-                        // // Draw the rects in their initial position
-                        // for (var i = 0; i < rects.length;i++){
-                        //     rects[i].draw(context);
-                        // }
-
-                        // // Fade all the previous drawings to show that they are just the initial positions
-                        // context.globalAlpha = .7;
-                        // context.fillStyle = "#fff";
-                        // context.fillRect(0,0,canvas.width, canvas.height);
-
-                        // var placedRects = binpacking.pack(area, rects, 10);
-
-                        // // Draw the rects in their final position
-                        // context.globalAlpha = 1;
-                        // for (var i = 0; i < placedRects.length;i++){
-                        //     placedRects[i].draw(context);
-                        // }
+                       // var placedRects = binpacking.pack(area, rects, 10);
 
                         // // Draw the text into each rect
                         // context.fillStyle = "#000";
@@ -130,7 +100,37 @@ function submitForm(e){
                         //     var fontSize = placedRects[i].getProperty("fontSize");
                         //     context.font = fontSize + "px Arial";
                         //     context.fillText(placedRects[i].getProperty("text"), placedRects[i].x, placedRects[i].y + fontSize/4);
-                        // }
+                        //    // context.fillStyle()
+		//}
+
+                        // Draw the area that the rects will show up in
+                        area.draw(context);
+
+                        // Draw the rects in their initial position
+                        for (var i = 0; i < rects.length;i++){
+                            rects[i].draw(context);
+                        }
+
+                        // Fade all the previous drawings to show that they are just the initial positions
+                        context.globalAlpha = .7;
+                        context.fillStyle = "#fff";
+                        context.fillRect(0,0,canvas.width, canvas.height);
+
+                        var placedRects = binpacking.pack(area, rects, 10);
+
+                        // Draw the rects in their final position
+                        context.globalAlpha = 1;
+                        for (var i = 0; i < placedRects.length;i++){
+                            placedRects[i].draw(context);
+                        }
+
+                        // Draw the text into each rect
+                        context.fillStyle = "#000";
+                        for (var i = 0;i < placedRects.length;i++){
+                            var fontSize = placedRects[i].getProperty("fontSize");
+                            context.font = fontSize + "px Arial";
+                            context.fillText(placedRects[i].getProperty("text"), placedRects[i].x, placedRects[i].y + fontSize/4);
+                        }
 
                         //simple.html
                         // var rects = [];
