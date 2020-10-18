@@ -87,12 +87,48 @@ function submitForm(e){
                             // Store some meta-information
                             rect.addProperty("fontSize", currFontSizes);
                             rect.addProperty("text", currWord);
+                            rect.addProperty("freq", localWordCountDict[key])
 
                             rects.push(rect);
-                               // }
-                               // }
-                        }
+
+                        } 
                         var placedRects = binpacking.pack(area, rects, 10);
+                        console.log(placedRects)
+                        canvas.onmousemove = function(e) {
+
+                            // important: correct mouse position:
+                            var rec = this.getBoundingClientRect(),
+                                x = e.clientX - rec.left,
+                                y = e.clientY - rec.top,
+                                i = 0, r;
+                            
+                            //context.clearRect(0, 0, canvas.width, canvas.height); // for demo
+                             
+                            while(r = placedRects[i++]) {
+                              // add a single rect to path:
+                              context.beginPath();
+                              context.rect(r.left, r.top, r.width, r.height);
+
+                              
+                              // check if we hover it, fill red, if not fill it blue
+                              if (context.isPointInPath(x, y))
+                              {
+                                context.strokeStyle = "#FF0000"; 
+                                context.strokeRect(r.left , r.top, r.width , r.height );
+                                context.font = fontSize/4 + "px Calibri";
+                                context.fillText(placedRects[i-1].getProperty("freq"),r.right + 5 ,r.bottom + 5);
+                               // context.strokeRect(r.right + 6, r.bottom + 6, r.width, r.height);
+                               // context.fillText(placedRects[i-1].getProperty("freq"),r.right + 5 ,r.bottom + 5);
+                              } 
+                              else{
+                                context.strokeStyle = "#FFFFFF"; 
+                                context.strokeRect(r.left , r.top , r.width , r.height );
+                                //context.fillStyle = "#FFFFFF";
+                                //context.fillText(placedRects[i-1].getProperty("freq"),r.right + 5 ,r.bottom + 5);
+                              }
+                              
+                            }  
+                        }
 
                         
                         // Fill with gradient
