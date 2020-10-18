@@ -62,8 +62,8 @@ function submitForm(e){
 
                         console.log(frequencyColor);
                         
-                        canvas.width = 900;
-		                canvas.height = 900;
+                        canvas.width = 1000;
+		                canvas.height = 1000;
 
                         var area = new binpacking.Rect(450,450,700,700);
 
@@ -77,12 +77,14 @@ function submitForm(e){
                             var currWord = key;
                             var currFontSizes = responseFontSizes[localWordCountDict[key]];
                             // Measure the word's size
-                            context.font = currFontSizes + "px Arial";
+                            context.font = currFontSizes + "px Times New Roman";
                             context.textAlign = "center";
                             var wordWidth = context.measureText(currWord).width;
 
                             // Place all the words randomly
-                            var rect = new binpacking.Rect(Math.random() * 400,Math.random() * 400,wordWidth+2,currFontSizes+2);
+                           // var rect = new binpacking.Rect(Math.random() * 400,Math.random() * 400,wordWidth+2,currFontSizes+2);
+                           var rect = new binpacking.Rect(450,450,wordWidth+2,currFontSizes+2);
+
 
                             // Store some meta-information
                             rect.addProperty("fontSize", currFontSizes);
@@ -92,7 +94,7 @@ function submitForm(e){
                             rects.push(rect);
 
                         } 
-                        var placedRects = binpacking.pack(area, rects, 10);
+                        var placedRects = binpacking.pack(area, rects, 5);
                         console.log(placedRects)
                         canvas.onmousemove = function(e) {
 
@@ -134,12 +136,14 @@ function submitForm(e){
                         // Fill with gradient
                         //ctx.fillStyle = gradient;
                         //ctx.fillText("Big smile!", 10, 90);
-
+                        var currColor
                         // Draw the text into each rect
                         context.fillStyle = "#000";
                         for (var i = 0;i < placedRects.length;i++){
                             var fontSize = placedRects[i].getProperty("fontSize");
-                            context.font = fontSize + "px Arial";
+                            context.font = fontSize + "px Times New Roman";
+                            //context.translate(canvas.width, canvas.height);
+                            //context.rotate(Math.PI / 2);
                             context.fillText(placedRects[i].getProperty("text"), placedRects[i].x, placedRects[i].y + fontSize/4);
                             context.fillStyle = 'hsl(' + 360 * Math.random() + ', 50%, 50%)';
 		}

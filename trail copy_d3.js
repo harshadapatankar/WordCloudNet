@@ -54,7 +54,88 @@ function submitForm(e){
                         var value = (snapshot.val()) || 'Error';
                         console.log("Frequency : ")
                         console.log(value);
+                        
+
+                        //d3 trail code
+                        var log = console.log.bind(console);
+                        var dir = console.dir.bind(console);
+                        var replace = function(string) { return string.replace(/[^a-z0-9]/gi,""); }
+                                        
+                        var width = 750,
+                        height = 400;
         
+                        var data = [];
+                        var value = 5000;
+                        var colorScale;
+
+                        var mainCanvas = d3.select('#container')
+                            .append('canvas')
+                            .classed('mainCanvas', true)
+                            .attr('width', width)
+                            .attr('height', height);
+                        
+                         // new -----------------------------------------------------
+
+                        var hiddenCanvas = d3.select('#container')
+                            .append('canvas')
+                            .classed('hiddenCanvas', true)
+                            .attr('width', width)
+                            .attr('height', height);
+
+                         //var colourToNode = {}; // map to track the colour of nodes
+
+                         // === Load and prepare the data === //
+
+                        d3.range(value).forEach(function(el) {
+                            
+                            data.push({ value: el });
+                        
+                        });
+
+                        // === Bind data to custom elements === //
+
+                        var customBase = document.createElement('custom');
+                        var custom = d3.select(customBase); // this is our svg replacement
+
+
+                        // settings for a grid with 40 cells in a row and 2x5 cells in a group
+                        //var groupSpacing = 4;
+                        //var cellSpacing = 2;
+                        //var cellSize = Math.floor((width - 11 * groupSpacing) / 100) - cellSpacing;
+                        var area = new binpacking.Rect(500,500,650,650);
+                        var rects = [];
+
+                        //first call 
+                        databind(data);
+                        var t = d3.timer(function(elapsed) {
+                            draw(mainCanvas, false); // <--- new insert arguments
+                            if (elapsed > 300) t.stop();
+                        }); // start a timer that runs the draw function for 300 ms (this needs to be higher than the transition in the databind function)
+
+                        function databind(data){
+                            var join = custom.selectAll('custom.rect')
+                            .data(data);
+
+                            var enterSel = join.enter()
+                            .append('custom')
+                            .attr('class','rect')
+                            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        //d3 trial code ends
 
                         //d3 trial
                         var [responseFormatted, responseFontSizes, frequencyColor, localWordCountDict] = parseResponseAndGetFontSizes(value);
@@ -68,7 +149,7 @@ function submitForm(e){
                         canvas.width = 1000;
 		                canvas.height = 1000;
 
-                        var area = new binpacking.Rect(450,450,700,700);
+                        var area = new binpacking.Rect(500,500,650,650);
 
                         //debug.html
                         var rects = [];
@@ -85,7 +166,7 @@ function submitForm(e){
                             var wordWidth = context.measureText(currWord).width;
 
                             // Place all the words randomly
-                            var rect = new binpacking.Rect(450, 450,wordWidth+2,currFontSizes+2);
+                            var rect = new binpacking.Rect(Math.random() * 450,Math.random() * 450,wordWidth+2,currFontSizes+2);
 
                             // Store some meta-information
                             rect.addProperty("fontSize", currFontSizes);
@@ -94,7 +175,6 @@ function submitForm(e){
                             rects.push(rect);
                                // }
                                // }
-                            //console.log(rects);
                         }
                        // var placedRects = binpacking.pack(area, rects, 10);
 
@@ -120,59 +200,12 @@ function submitForm(e){
                         context.fillStyle = "#fff";
                         context.fillRect(0,0,canvas.width, canvas.height);
 
-                        var rects_sorted = [];
-                        rects_sorted = rects.sort(function(a, b){return b-a});
-
-                        var placedRects = binpacking.pack(area, rects_sorted, 5);
-
-                        console.log(placedRects);
-
-                        canvas.onmousemove = function(e) {
-
-                            // important: correct mouse position:
-                            var rec = this.getBoundingClientRect(),
-                                x = e.clientX - rec.left,
-                                y = e.clientY - rec.top,
-                                i = 0, r;
-                            
-                           // ctx.clearRect(0, 0, canvas.width, canvas.height); // for demo
-                             
-                            while(r = placedRects[i++]) {
-                              // add a single rect to path:
-                              context.beginPath();
-                              context.rect(r.left, r.top, r.width, r.height);    
-                              
-                              // check if we hover it, fill red, if not fill it blue
-
-                              //context.fillStyle = context.isPointInPath(x, y) ? "red" : "blue";
-                              //context.fill()
-                              context.fillStyle = "#000";
-                              if (context.isPointInPath(x,y)){
-                                  
-                                context.strokeStyle = "#FF0000"; 
-                                context.strokeRect(r.left , r.top, r.width , r.height );
-                                context.font = fontSize/4 + "px Calibri";
-                                context.fillText(placedRects[i-1].getProperty("freq"),r.right + 5 ,r.bottom + 5);
-                               // context.strokeRect(r.right + 6, r.bottom + 6, r.width, r.height);
-                               // context.fillText(placedRects[i-1].getProperty("freq"),r.right + 5 ,r.bottom + 5);
-                              } 
-                              else{
-                                context.strokeStyle = "#FFFFFF"; 
-                                context.strokeRect(r.left , r.top , r.width , r.height );
-                                //context.fillStyle = "#FFFFFF";
-                                //context.fillText(placedRects[i-1].getProperty("freq"),r.right + 5 ,r.bottom + 5);
-                              }
-                              
-                              
-                            }
-                          
-                          };
+                        var placedRects = binpacking.pack(area, rects, 10);
 
                         // Draw the rects in their final position
                         context.globalAlpha = 1;
                         for (var i = 0; i < placedRects.length;i++){
                             placedRects[i].draw(context);
-                           //context.rotate(-Math.PI/2);
                         }
 
                         // Draw the text into each rect
@@ -180,8 +213,6 @@ function submitForm(e){
                         for (var i = 0;i < placedRects.length;i++){
                             var fontSize = placedRects[i].getProperty("fontSize");
                             context.font = fontSize + "px Arial";
-                            //context.translate(canvas.width / 2, canvas.height / 2);
-                            //context.rotate(Math.PI /180);
                             context.fillText(placedRects[i].getProperty("text"), placedRects[i].x, placedRects[i].y + fontSize/4);
                         }
                         //d3-trail

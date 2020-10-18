@@ -1,6 +1,7 @@
 var binpacking = (function(){
 
     // How much to move a Rect outward each step
+    //
     var closenessStep = 0.1;
 
     // How many degrees to travel to search for a new placement
@@ -50,14 +51,15 @@ var binpacking = (function(){
         // original location of the rect
         if (checkRectWithinArea(rect, area) && !checkCollisions(rect, placedRects)){
             // Nothing there! Just place the rect
-            return rect.clone();
+            //return rect.clone();
+            return rect;
         }
 
         // There was a collision at the rects center location, so
         // we'll check in a circle around the rect with an expanding
         // radius until we're too far away
         var maxDistance = dRatio * rect.size;
-        var rotationOffset = Math.random() * 360;
+        var rotationOffset = Math.random() * 180;
         var newRect = rect.clone();
         newRect.originalx = rect.x;
         newRect.originaly = rect.y;
@@ -170,8 +172,11 @@ var binpacking = (function(){
             context.beginPath();
             context.moveTo(this.originalx, this.originaly);
             context.lineTo(this.x, this.y);
+            //context.translate(this.x,this.y);
+           // context.rotate(-Math.PI/4);
             context.closePath();
             context.stroke();
+            
         }
         context.restore();
     }

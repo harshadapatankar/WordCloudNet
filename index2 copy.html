@@ -9,6 +9,8 @@
         <script src="https://requirejs.org/docs/release/2.3.5/minified/require.js"></script>
         <script src="https://www.gstatic.com/firebasejs/4.3.0/firebase.js"></script>
         <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+        <script src="http://d3js.org/d3.v4.js"></script>
+	    <script src="https://d3js.org/d3-scale-chromatic.v1.min.js"></script>
         
         <script>
             function redirect(id){
@@ -18,6 +20,24 @@
         </script>
         <!-- <script type="module" src="submit.js"></script> -->
         <script type = "module" src="binpacking.js"></script>
+
+        <!--new code for d3 and canvas-->
+        <style type="text/css">
+		
+            body {
+                font-family: 'Open Sans', sans-serif;
+            }
+            
+            canvas {
+                border:  1px dotted #ccc;
+            }
+            
+            #tip{background-color:white; border:1px solid blue; position:absolute; left:-200px; top:100px;}
+
+    
+    
+        </style>
+        
     </head>
     <body>
         <p style="position: absolute; right:0; top: 0" id="status"></p>
@@ -31,11 +51,18 @@
                     <input type="submit" value="Submit">
                 </form>
             </div>
+            <!--new d3 canvas-->
+            <div id="container"></div>
+
+            <div id="tooltip">hello</div>	<!-- new  -->
+            
+
             <div id="response-info" style="border: 1px solid black; min-height: 10px; text-align: left;"> <b><span style="font-size: 22px">Hover on any word to reveal:</span></b> </div>
             <!-- <div id="response-area" style="border: 1px solid black;"> -->
                 <canvas id='canvas'> </canvas>
                     <script type = "text/javascript" src="binpacking copy.js"></script>
-                    <script type="text/javascript" src="trial copy.js"> </script>
+                    <script type="text/javascript" src="trial copy.js"> </script> 
+                    <!-- <script type="text/javascript" src="trail copy_d3.js"> </script> -->
                 
             </div>
         
