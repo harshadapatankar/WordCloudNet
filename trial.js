@@ -62,10 +62,10 @@ function submitForm(e){
 
                         console.log(frequencyColor);
                         
-                        canvas.width = 1000;
-		                canvas.height = 1000;
+                        canvas.width = 900;
+		                canvas.height = 900;
 
-                        var area = new binpacking.Rect(500,500,650,650);
+                        var area = new binpacking.Rect(450,450,700,700);
 
                         //debug.html
                         var rects = [];
@@ -82,7 +82,7 @@ function submitForm(e){
                             var wordWidth = context.measureText(currWord).width;
 
                             // Place all the words randomly
-                            var rect = new binpacking.Rect(Math.random() * 600,Math.random() * 600,wordWidth+5,currFontSizes+5);
+                            var rect = new binpacking.Rect(Math.random() * 400,Math.random() * 400,wordWidth+2,currFontSizes+2);
 
                             // Store some meta-information
                             rect.addProperty("fontSize", currFontSizes);
@@ -94,13 +94,18 @@ function submitForm(e){
                         }
                         var placedRects = binpacking.pack(area, rects, 10);
 
+                        
+                        // Fill with gradient
+                        //ctx.fillStyle = gradient;
+                        //ctx.fillText("Big smile!", 10, 90);
+
                         // Draw the text into each rect
                         context.fillStyle = "#000";
                         for (var i = 0;i < placedRects.length;i++){
                             var fontSize = placedRects[i].getProperty("fontSize");
                             context.font = fontSize + "px Arial";
                             context.fillText(placedRects[i].getProperty("text"), placedRects[i].x, placedRects[i].y + fontSize/4);
-                           // context.fillStyle()
+                            context.fillStyle = 'hsl(' + 360 * Math.random() + ', 50%, 50%)';
 		}
 
                         // // Draw the area that the rects will show up in
